@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="A Human-in-the-Loop Deep Learning Framework for Color Reconstruction of Lenticular Films - Sinha, Kleist, Trumpy">
+  <meta name="description" content="A human-in-the-loop deep learning framework for color reconstruction of historical lenticular films (Kodacolor). An editable, vector-based representation of lenticule boundaries lets experts shift, tilt and crop before demosaicing, while iterative fine-tuning embeds expert priors and CIELAB post-processing preserves the original silver-emulsion texture.">
+  <meta name="keywords" content="color reconstruction, lenticular films, Kodacolor, historical photographs, film preservation, deep learning, segmentation, human-in-the-loop, deep-doLCE, doLCE, demosaicing, cultural heritage">
+  <meta name="author" content="Saptarshi Neil Sinha, Tiago Kleist, Giorgio Trumpy">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Fraunhofer IGD / NTNU Colourlab">
+  <meta property="og:title" content="A Human-in-the-Loop Deep Learning Framework for Color Reconstruction of Lenticular Films">
+  <meta property="og:description" content="Editable lenticule boundaries, expert-driven correction and iterative fine-tuning enable exhibitable color reconstructions of historical lenticular films where fully automatic pipelines fail.">
+  <!-- TODO: Replace with your actual website URL -->
+  <meta property="og:url" content="https://YOUR_DOMAIN.com/lenticular-hitl">
+  <!-- TODO: Create a 1200x630px preview image and update path -->
+  <meta property="og:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Human-in-the-Loop Color Reconstruction of Lenticular Films - Research Preview">
+  <meta property="og:video" content="https://zenodo.org/records/22252329">
+  <meta property="article:published_time" content="2026-08-05T00:00:00.000Z">
+  <meta property="article:author" content="Saptarshi Neil Sinha">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="lenticular films">
+  <meta property="article:tag" content="human-in-the-loop">
+  <meta property="article:tag" content="color reconstruction">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- TODO: Replace with your lab/institution Twitter handle -->
+  <meta name="twitter:site" content="@YOUR_TWITTER_HANDLE">
+  <!-- TODO: Replace with first author's Twitter handle -->
+  <meta name="twitter:creator" content="@AUTHOR_TWITTER_HANDLE">
+  <meta name="twitter:title" content="Human-in-the-Loop Color Reconstruction of Lenticular Films">
+  <meta name="twitter:description" content="Expert-editable lenticule boundaries + iterative fine-tuning + texture-preserving post-processing for historical lenticular film color reconstruction.">
+  <meta name="twitter:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
+  <meta name="twitter:image:alt" content="Human-in-the-Loop Color Reconstruction of Lenticular Films - Research Preview">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="A Human-in-the-Loop Deep Learning Framework for Color Reconstruction of Lenticular Films">
+  <meta name="citation_author" content="Sinha, Saptarshi Neil">
+  <meta name="citation_author" content="Kleist, Tiago">
+  <meta name="citation_author" content="Trumpy, Giorgio">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_technical_report_institution" content="arXiv preprint">
+  <meta name="citation_arxiv_id" content="2608.02835">
+  <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2608.02835">
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://zenodo.org">
+
+  <title>A Human-in-the-Loop Deep Learning Framework for Color Reconstruction of Lenticular Films</title>
+
+  <!-- Critical CSS -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <!-- Non-critical CSS -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Inline styles for the prominent video section -->
+  <style>
+    .video-highlight {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #fff;
+      padding: 3rem 1.5rem;
+    }
+    .video-highlight .title,
+    .video-highlight .subtitle,
+    .video-highlight p {
+      color: #fff !important;
+    }
+    .video-highlight a {
+      color: #bfdbfe;
+      text-decoration: underline;
+    }
+    .video-frame {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
+      background: #000;
+    }
+    .video-frame video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+    }
+    .zenodo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      font-weight: 600;
+      color: #fff !important;
+      text-decoration: none !important;
+      transition: background 0.2s ease;
+    }
+    .zenodo-badge:hover {
+      background: rgba(255, 255, 255, 0.28);
+    }
+  </style>
+
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ScholarlyArticle",
+      "headline": "A Human-in-the-Loop Deep Learning Framework for Color Reconstruction of Lenticular Films",
+      "description": "A human-in-the-loop deep learning framework for lenticular film color reconstruction that decouples lenticule boundary detection from colorization, exposes an editable vector-based boundary representation for expert correction, iteratively fine-tunes the detection model, and preserves original film texture via CIELAB post-processing.",
+      "author": [
+        {
+          "@type": "Person",
+          "name": "Saptarshi Neil Sinha",
+          "affiliation": { "@type": "Organization", "name": "Virtual and Augmented Reality, Fraunhofer IGD, Darmstadt, Germany" }
+        },
+        {
+          "@type": "Person",
+          "name": "Tiago Kleist",
+          "affiliation": { "@type": "Organization", "name": "Virtual and Augmented Reality, Fraunhofer IGD, Darmstadt, Germany" }
+        },
+        {
+          "@type": "Person",
+          "name": "Giorgio Trumpy",
+          "affiliation": { "@type": "Organization", "name": "Colourlab, Norwegian University of Science and Technology, Gjøvik, Norway" }
+        }
+      ],
+      "datePublished": "2026-08-05",
+      "publisher": { "@type": "Organization", "name": "arXiv" },
+      "url": "https://arxiv.org/abs/2608.02835",
+      "identifier": "arXiv:2608.02835",
+      "image": "https://YOUR_DOMAIN.com/static/images/social_preview.png",
+      "keywords": ["color reconstruction", "lenticular films", "Kodacolor", "historical photographs", "deep learning", "segmentation", "human-in-the-loop training", "film preservation"],
+      "abstract": "Historical lenticular films, such as those created with the Kodacolor process, encode color information in a distinctive spatial format. This structure requires specialized techniques for accurate color reconstruction. While recent signal processing approaches like doLCE and deep learning methods like deep-doLCE have advanced automated color recovery, they often fail with cases such as curved lenticules, low-contrast, or badly captured regions. We propose a human-in-the-loop (HITL) deep learning framework which is designed for color reconstruction in lenticular films. Our approach introduces an editable, vector-based representation of lenticule boundaries, allowing experts to interactively refine boundary positions before color extraction and demosaicing. This decoupled architecture enables targeted corrections and iterative fine-tuning, embedding expert knowledge into the detection model and improving robustness across challenging frames. To preserve image details using information solely present in the original silver emulsion, we merge the reconstructed chrominance with the original film scan's luminance. We evaluate our pipeline on a challenging lenticular film sequence where previous automated approaches fail and the reconstructed colors are not suitable for exhibition. In contrast, our HITL approach successfully produces high-quality, exhibitable color reconstructions with preserved texture. This work is the first to combine expert guidance, editable intermediate representations, and texture-preserving post-processing for lenticular film color reconstruction, advancing the state of the art in this field.",
+      "isAccessibleForFree": true,
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "mainEntity": { "@type": "WebPage", "@id": "https://arxiv.org/abs/2608.02835" },
+      "associatedMedia": {
+        "@type": "VideoObject",
+        "name": "Expert verification and feedback demo",
+        "description": "Video demonstration of the expert verification and feedback interface for lenticule boundary annotation: browsing the paged frame gallery, cropping to reliable regions of interest, shifting and tilting the lenticule boundary grid, and accepting or discarding frames.",
+        "url": "https://zenodo.org/records/22252329",
+        "thumbnailUrl": "https://YOUR_DOMAIN.com/static/images/annotation_ui.png",
+        "uploadDate": "2026-08-05"
+      },
+      "funding": [
+        { "@type": "Grant", "identifier": "101061157", "name": "PERCEIVE (Horizon Europe)" },
+        { "@type": "Grant", "identifier": "101233413", "name": "COLOURS (Horizon Europe)" }
+      ],
+      "about": [
+        { "@type": "Thing", "name": "Lenticular Film Color Reconstruction" },
+        { "@type": "Thing", "name": "Human-in-the-Loop Machine Learning" }
+      ]
+    }
+  </script>
+
+  <!-- Website/Organization Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Fraunhofer IGD",
+      "url": "https://www.igd.fraunhofer.de/",
+      "logo": "https://YOUR_DOMAIN.com/static/images/favicon.ico",
+      "sameAs": [
+        "https://twitter.com/YOUR_TWITTER_HANDLE",
+        "https://github.com/YOUR_GITHUB_USERNAME"
+      ]
+    }
+  </script>
+</head>
+<body>
+
+<!-- Scroll to Top Button -->
+<button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<!-- More Works Dropdown -->
+<div class="more-works-container">
+  <button class="more-works-btn" onclick="toggleMoreWorks()" title="View More Works from Our Lab">
+    <i class="fas fa-flask"></i>
+    More Works
+    <i class="fas fa-chevron-down dropdown-arrow"></i>
+  </button>
+  <div class="more-works-dropdown" id="moreWorksDropdown">
+    <div class="dropdown-header">
+      <h4>Related Work</h4>
+      <button class="close-btn" onclick="toggleMoreWorks()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="works-list">
+      <a href="https://arxiv.org/abs/2212.03051" class="work-item" target="_blank" rel="noopener">
+        <div class="work-info">
+          <h5>deep-doLCE: A Deep Learning Approach for Digital Color Reconstruction of Lenticular Films</h5>
+          <p>Two-stage automatic pipeline (boundary segmentation + constrained interpolation) that our human-in-the-loop framework builds upon and extends.</p>
+          <span class="work-venue">D'Aronco et al., 2022</span>
+        </div>
+        <i class="fas fa-external-link-alt"></i>
+      </a>
+      <a href="https://doi.org/10.5169/seals-980426" class="work-item" target="_blank" rel="noopener">
+        <div class="work-info">
+          <h5>doLCE: Die Farben des Riffelfilms — Digitale Farbrekonstruktion von Linsenrasterfilm</h5>
+          <p>Signal-processing baseline that detects lenticules from intensity profiles; its successful outputs serve as pseudo-ground truth for boundary segmentation.</p>
+          <span class="work-venue">Reuteler &amp; Gschwind, 2014</span>
+        </div>
+        <i class="fas fa-external-link-alt"></i>
+      </a>
+      <a href="https://arxiv.org/abs/2304.02643" class="work-item" target="_blank" rel="noopener">
+        <div class="work-info">
+          <h5>Human-in-the-Loop Atlas-Based 3D Asset Segmentation for Interactive Content Workflows</h5>
+          <p>Related HITL workflow for cultural heritage and content production, motivating expert-guided intermediate representations.</p>
+          <span class="work-venue">Kühn et al., 2026</span>
+        </div>
+        <i class="fas fa-external-link-alt"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+<main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">A Human-in-the-Loop Deep Learning Framework for Color Reconstruction of Lenticular Films</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="mailto:saptarshineilsinha@gmail.com" target="_blank">Saptarshi Neil Sinha</a><sup>1*</sup>,</span>
+              <span class="author-block">
+                <a href="mailto:tiago.kleist@igd.fraunhofer.de" target="_blank">Tiago Kleist</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="mailto:giorgio.trumpy@ntnu.no" target="_blank">Giorgio Trumpy</a><sup>2*</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <sup>1</sup>Virtual and Augmented Reality, Fraunhofer IGD, Darmstadt, Germany &nbsp;
+                <sup>2</sup>Colourlab, NTNU, Gjøvik, Norway
+<!--                <br>arXiv preprint arXiv:2608.02835v2, 5 August 2026-->
+              </span>
+              <span class="eql-cntrb"><small><br><sup>*</sup>Corresponding author</small></span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2608.02835" target="_blank" rel="noopener"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2608.02835" target="_blank" rel="noopener"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper (PDF)</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="#video-demo"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-video"></i></span>
+                    <span>Demo Video</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://zenodo.org/records/22252329" target="_blank" rel="noopener"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-zenodo"></i></span>
+                    <span>Zenodo</span>
+                  </a>
+                </span>
+
+                <!-- TODO: Replace with your GitHub repository URL once the code is released -->
+                <span class="link-block">
+                  <a class="external-link button is-normal is-rounded is-dark" disabled
+                     title="Code release is planned — check back soon">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code (upcoming)</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaser figure -->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <figure class="image">
+          <img src="static/images/hitl_pipeline.png"
+               alt="Overview of the human-in-the-loop pipeline: a lenticule boundary detector and colorizer produce initial frames, experts discard, crop, shift and tilt boundaries, the dataset is updated, the model is fine-tuned, and post-processing yields the final frame sequence"/>
+        </figure>
+        <h2 class="subtitle has-text-centered">
+          <b>Overview of our human-in-the-loop pipeline.</b> An initial lenticular boundary detector and colorization model
+          processes the scanned film. Experts then review the results, discarding undesired outputs, selecting reliable
+          regions, and improving color reconstruction by interactively adjusting lenticular boundaries (shifting, tilting,
+          cropping to regions of interest). The corrected annotations update the dataset and fine-tune the initial model.
+          This process can be repeated, recursively embedding expert priors into the model. Once all frames are colorized
+          satisfactorily, CIELAB post-processing produces the final frame sequence.
+        </h2>
+      </div>
+    </div>
+  </section>
+  <!-- End teaser figure -->
+
+  <!-- Paper abstract -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Historical lenticular films, such as those created with the <strong>Kodacolor</strong> process, encode color
+              information in a distinctive spatial format. This structure requires specialized techniques for accurate
+              color reconstruction. While recent signal processing approaches like <em>doLCE</em> and deep learning methods
+              like <em>deep-doLCE</em> have advanced automated color recovery, they often fail with cases such as curved
+              lenticules, low-contrast, or badly captured regions.
+            </p>
+            <p>
+              We propose a <strong>human-in-the-loop (HITL)</strong> deep learning framework which is designed for color
+              reconstruction in lenticular films. Our approach introduces an editable, vector-based representation of
+              lenticule boundaries, allowing experts to interactively refine boundary positions before color extraction and
+              demosaicing. This decoupled architecture enables targeted corrections and iterative fine-tuning, embedding
+              expert knowledge into the detection model and improving robustness across challenging frames. To preserve
+              image details using information solely present in the original silver emulsion, we merge the reconstructed
+              chrominance with the original film scan's luminance. We evaluate our pipeline on a challenging lenticular
+              film sequence where previous automated approaches fail and the reconstructed colors are not suitable for
+              exhibition. In contrast, our HITL approach successfully produces high-quality, exhibitable color
+              reconstructions with preserved texture. This work is the first to combine expert guidance, editable
+              intermediate representations, and texture-preserving post-processing for lenticular film color
+              reconstruction, advancing the state of the art in this field.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End paper abstract -->
+
+  <!-- Contributions -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Contributions</h2>
+          <div class="content has-text-justified">
+            <ul>
+              <li>We introduce the first <strong>editable representation of lenticule boundaries</strong> in a deep
+                learning based lenticular color reconstruction pipeline, allowing flexible expert-driven corrections that
+                are not possible with previous approaches such as deep-doLCE.</li>
+              <li>We present a <strong>human-in-the-loop (HITL) architecture</strong> for lenticular color reconstruction,
+                enabling experts to review, correct, and iteratively improve the detection and colorization process.</li>
+              <li>We propose an <strong>iterative fine-tuning strategy</strong> in which expert-corrected lenticule
+                boundary annotations progressively adapt the detection network to film-specific color reconstruction
+                failures, embedding domain knowledge directly into the model and improving reconstruction quality across
+                the entire sequence.</li>
+              <li>We add a <strong>texture-preserving post-processing step</strong> that merges the reconstructed
+                chrominance with the luminance of the original scan, retaining the authentic grain and detail of the silver
+                emulsion.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End contributions -->
+
+  <!-- Results / evaluation -->
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 has-text-centered">Evaluation</h2>
+
+      <h3 class="title is-5">Dataset</h3>
+      <div class="content has-text-justified">
+        <p>
+          We evaluate on the historical lenticular film sequence <em>Ein Besuch im Lappenlager</em> ("A visit to a Sami
+          settlement"), filmed by a German amateur filmmaker in <strong>1930</strong> and preserved as part of an archive
+          collection in Stuttgart, Germany. The lenticules are difficult to detect in several areas of the scan, so the
+          fully automatic pipeline failed to reconstruct plausible colors for most frames — making this sequence a natural
+          premiere use case for our HITL method. Since no reliable color ground truth exists, the comparison is based on
+          qualitative visual inspection.
+        </p>
+      </div>
+
+      <h3 class="title is-5">Iterative fine-tuning progression</h3>
+      <p class="content">
+        Expert effort concentrates in the first iteration and decreases in each subsequent round; the process converged
+        within four iterations for this sequence.
+      </p>
+      <div class="table-container">
+        <table class="table is-fullwidth is-striped is-narrow">
+          <thead>
+          <tr><th>Iteration</th><th>Expert operations used</th><th>Frames added</th><th>Observed outcome</th></tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>1</td>
+            <td>Shifting, tilting, cropping to reliable ROIs</td>
+            <td>≈265 frames (11% of the sequence)</td>
+            <td>Substantially improved color across all frames; small regions of residual discolorization remain</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Mostly cropping, minor shifting in very few cases</td>
+            <td>—</td>
+            <td>Model already handles most misalignment cases learned in round 1; no tilting required</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Border cropping only</td>
+            <td>—</td>
+            <td>High reconstruction quality; only marginal edge artifacts remain</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>None — frames accepted without corrections</td>
+            <td>≈165 frames (7% of the sequence)</td>
+            <td>Residual artifacts mostly resolved; plausible color throughout the entire sequence</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <!-- End results -->
+
+  <!-- Image carousel -->
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3 has-text-centered">Qualitative Results</h2>
+        <div id="results-carousel" class="carousel results-carousel">
+          <div class="item">
+            <img src="static/images/lenticularprocess.png"
+                 alt="Diagram of the three stages of lenticular color reproduction: shooting, processing and projection, with green, yellow and red color elements"
+                 loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              <b>The Kodacolor process.</b> The three stages of lenticular color reproduction — shooting, processing and
+              projection. Color is split by a tri-color filter and recorded as grayscale stripes beneath each cylindrical
+              lenticule embossed on the film surface.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/editable_pipeline.png"
+                 alt="Two-stage pipeline with a lenticule boundary detection network whose output is exposed as an editable boundary layer before the color extraction and demosaicing network"
+                 loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              <b>Decoupled architecture.</b> The input frame is first processed by the lenticular boundary detection network,
+              whose output is exposed as an editable boundary layer that the user can shift or tilt before color
+              reconstruction. The refined boundaries are then passed to the color channel extraction and demosaicing network.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/annotation_ui.png"
+                 alt="User interface for expert-guided lenticule boundary annotation with gallery, left and right crop, shift and tilt controls"
+                 loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              <b>Annotation interface.</b> Expert-guided lenticular boundary annotation and color reconstruction
+              verification, with a paged frame gallery, left/right cropping, and shift and tilt controls for the boundary
+              grid.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/op_crop.png"
+                 alt="Cropping operation: original discolored deep-doLCE frame, user crop to reliable part with excluded region in grayscale, and the accepted region added to the dataset"
+                 loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              <b>Crop / select region of interest.</b> Left: the reconstructed frame with discolored regions from the
+              deep-doLCE output. Middle: the user crops to the reliable part, with the excluded region shown in grayscale.
+              Right: the reliable crop is added to the dataset for iterative fine-tuning.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/op_shift.png"
+                 alt="Shifting operation: discolored deep-doLCE frame, boundaries shifted right for more reliable colors, and a further shift correcting the frame colors"
+                 loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              <b>Shift lenticular boundaries.</b> Left: the discolored frame from deep-doLCE. Middle: the user shifts the
+              boundaries to the right to achieve more reliable colors. Right: a further shift fully corrects the frame
+              colors.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/op_tilt.png"
+                 alt="Tilting operation: discolored deep-doLCE frame, boundaries tilted to correct the left region highlighted in yellow, and a crop to the reliable corrected left part"
+                 loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              <b>Tilt lenticular boundaries.</b> Left: the discolored frame from deep-doLCE. Middle: the user tilts the
+              boundaries to correct the discolored left region (yellow box), while the right region remains uncorrectable.
+              Right: the user crops to the reliable corrected left part of the frame.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/comparison_deepdolce_hitl.png"
+                 alt="Qualitative comparison of deep-doLCE and our human-in-the-loop reconstruction on four representative frames of Ein Besuch im Lappenlager"
+                 loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              <b>Comparison with the fully automatic pipeline</b> on <em>Ein Besuch im Lappenlager</em>. Two frames compare
+              the deep-doLCE output with our HITL reconstruction before post-processing; two further frames are shown after
+              the lightness-preserving CIELAB step.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/iterative_finetuning.png"
+                 alt="Iterative fine-tuning progression on four frames: deep-doLCE baseline, first fine-tuning iteration with residual artifacts highlighted, and fourth iteration"
+                 loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              <b>Iterative fine-tuning progression.</b> Each row shows the same frame at three stages: the deep-doLCE
+              baseline (left), after the first fine-tuning iteration (middle, residual discolorization in red boxes), and
+              after the fourth iteration (right), where artifacts are mostly resolved.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/postprocessing.png"
+                 alt="Effect of post-processing: model output before and after replacing the brightness channel with that of the original film scan"
+                 loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              <b>Effect of post-processing.</b> Replacing the model brightness with that of the original scan preserves fine
+              texture and grain while maintaining the reconstructed color, improving visual fidelity and texture
+              consistency.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/zoom_comparison.png"
+                 alt="Zoomed comparison of deep-doLCE, HITL and post-processed output on a group wearing Sami traditional attire"
+                 loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              <b>Zoomed comparison.</b> deep-doLCE (left) appears largely decolorized with a washed-out left half; the HITL
+              reconstruction (middle) restores rich bluish and magenta tones and removes the color discontinuity; the
+              post-processed output (right) additionally recovers grain and the intricate patterns of Sámi traditional wear.
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End image carousel -->
+
+  <!-- ============================================================ -->
+  <!-- PROMINENT VIDEO DEMONSTRATION (after Qualitative Results)    -->
+  <!-- ============================================================ -->
+  <section class="hero video-highlight" id="video-demo">
+    <div class="container is-max-desktop has-text-centered">
+      <p class="is-size-7 has-text-weight-bold" style="letter-spacing:0.18em;text-transform:uppercase;opacity:0.85;">
+        Video Demonstration
+      </p>
+      <h2 class="title is-2" style="margin-top:0.5rem;">Expert Verification and Feedback in Action</h2>
+      <p class="is-size-5" style="max-width:760px;margin:0 auto 2rem;">
+        See the annotation tool which uses the concept of reconstructed color guided annotation of lenticular boundaries allowing embedding of expert priors.
+      </p>
+
+      <div class="video-frame">
+        <video controls preload="metadata" playsinline
+               poster="static/images/poster_video.png">
+          <!-- Primary source: locally hosted copy -->
+          <source src="static/video/HITL_Lenticular_Color_Reconstruction_Demo.mp4" type="video/mp4">
+          <!-- TODO: Confirm the exact filename on the Zenodo record and update below -->
+          <source src="https://zenodo.org/records/22252329/files/expert_verification_demo.mp4?download=1" type="video/mp4">
+          Your browser does not support the video tag.
+          <a href="https://zenodo.org/records/22252329" target="_blank" rel="noopener">Watch the demo on Zenodo</a>.
+        </video>
+      </div>
+
+      <a class="zenodo-badge" href="https://zenodo.org/records/22252329" target="_blank" rel="noopener">
+        <span class="icon"><i class="ai ai-zenodo"></i></span>
+        <span>Video demonstration archived on Zenodo — record 22252329</span>
+        <span class="icon"><i class="fas fa-external-link-alt"></i></span>
+      </a>
+
+      <p class="is-size-7" style="margin-top:1.25rem;opacity:0.9;">
+        Each frame is colorized on-the-fly with deep-doLCE as it is loaded into view, taking approximately 2–5&nbsp;seconds
+        per frame depending on GPU and scan resolution (≈3&nbsp;s on an NVIDIA A100 40&nbsp;GB for this dataset).
+      </p>
+    </div>
+  </section>
+  <!-- End prominent video demonstration -->
+
+  <!-- Acknowledgements -->
+  <section class="section" id="acknowledgements">
+    <div class="container is-max-desktop content">
+      <h2 class="title is-3 has-text-centered">Acknowledgments</h2>
+      <p class="has-text-justified">
+        The work presented in this paper has been partially funded by the European Commission through the Horizon Europe
+        projects <strong>PERCEIVE</strong> under Grant Agreement No. 101061157 and <strong>COLOURS</strong> under Grant
+        Agreement No. 101233413. The authors wish to thank Anna Leippe (Haus des Dokumentarfilms, Stuttgart) for providing
+        the case study and conducting the historical research. They are also grateful to Joachim Reuteler for his technical
+        support. Rudolf Gschwind (Emeritus, University of Basel) contributed to the early stages of this research, and this
+        work builds upon many of his pioneering studies in the field of digital imaging for color photography.
+      </p>
+    </div>
+  </section>
+  <!-- End acknowledgements -->
+
+  <!-- BibTeX citation -->
+  <section class="section hero is-light" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@misc{sinha2026humanintheloopdeeplearningframework,
+  title={A Human-in-the-Loop Deep Learning Framework for Color Reconstruction of Lenticular Films},
+  author={Saptarshi Neil Sinha and Tiago Kleist and Giorgio Trumpy},
+  year={2026},
+  eprint={2608.02835},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2608.02835}
+}</code></pre>
+    </div>
+  </section>
+  <!-- End BibTeX citation -->
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank" rel="noopener">Nerfies</a> project page.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
